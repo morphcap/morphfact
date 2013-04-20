@@ -288,6 +288,7 @@ class Cep extends CApplicationComponent
 				
 		$d = $d["base"];
 		$r = array();
+		$r["source"] = $d["ep"];
 		//print_r($d);
 		$r["product-id"] = $d["product-id"];
 		$r["modification-date"] = $d["modification-date"];

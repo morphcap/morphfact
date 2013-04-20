@@ -45,7 +45,8 @@ class Csonepar extends CApplicationComponent
 			
 		}
 		
-		print_r($result);exit;
+		//print_r($result);
+		exit;
 
 		return $result;
 	}
