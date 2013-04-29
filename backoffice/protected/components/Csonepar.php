@@ -45,7 +45,7 @@ class Csonepar extends CApplicationComponent
 			
 		}
 		
-		//print_r($result);
+		print_r($result);
 		exit;
 
 		return $result;
@@ -59,8 +59,6 @@ class Csonepar extends CApplicationComponent
 	{
 		$result = array();
 		$r = array();
-	
-		// read products
 		
 		// Set filename to store download (cached version)
 		$file = Yii::app()->basePath.'/data/sonepar/DATANORM.001';
@@ -70,7 +68,7 @@ class Csonepar extends CApplicationComponent
 		foreach ($data as $act) {
 			$d = split(";",utf8_encode($act));
 			
-			if (isset($d[0]) && (($d[0] == "A") OR ($d[0] == "B"))) {
+			if (isset($d[0]) && (($d[0] == "A") OR ($d[0] == "B") )) {
 
 				$artnr = $d[2];
 				
@@ -103,41 +101,66 @@ class Csonepar extends CApplicationComponent
 		}
 		
 		// parse raw data and prepare result
-		//foreach ($r as $key=>$value)
-		//	$result[] = $this->ImportProducts_parseProduct($key, $value);
+		foreach ($r as $key=>$value) {
+			$d = $this->ImportProducts_parseProduct($key, $value);
+	
+			// save product
+			if ($d)
+				$model->UpdateProduct($d);			
+		}
 		
-		return $r;
+		return $d;
 	}
 
 
-	public function ImportProducts_parseProduct($key, $value)
+	public function ImportProducts_parseProduct($artnr, $data)
 	{				
 		$r = array();
-		//print_r($d);
-		$r["product-id"] = $key;
-		print_r($value);
-		$text1 = $value['A'][4];
-		$text2 = $value['A'][5];
-		$price_brutto = $value['A'][9];
-		$price_netto = $value['P'][4];
-		$wgr = $value['A'][11];
-		$r["eancode"] = $value['B'][9];
+		//print_r($data);
+		$r["source"] = "sonepar";
 		
-		/*
-		$r["modification-date"] = $d["modification-date"];
-		$r["category"] = $d["category-links"]["category-link"]["@id"];
-		$r["name"] = $d["name"][0];
+		$r["product-id"] = $artnr;
+		$r["eancode"] = $data['B'][9];
+		$r["category"] =  $data['A'][11];
+
+		// empty
+		$r["txt_long"] = '';
+		$r["manufacturer"] = '';
+		$r["manufacturer_product-id"] = '';
+		
 		
 		// Text handling
-		$r["txt_short"] = '';
-		$r["txt_long"] = '';
-		$r["manufacturer"] = (isset($d["distributor"]["manufacturer"]["name"]) ? $d["distributor"]["manufacturer"]["name"] : null);
-		$r["manufacturer_product-id"] = (isset($d["distributor"]["manufacturer"]["manufacturer-product-id"]) ? $d["distributor"]["manufacturer"]["manufacturer-product-id"] : null);
+		$text1 = $data['A'][4];
+		$text2 = $data['A'][5];
+		$r["name"] = $text1." ".$text2;
+		$r["txt_short"] = $r["name"];
+		//$r["txt_long"] = '';
+		
+		// Price handling
+		if (!isset($data['P'])) {
+			//print_r($data);
+			return false;
+		}
+		$price_brutto = $data['A'][9];
+		$price_netto = $data['P'][4];
+		
+		$r['prices'] = array(
+			array(
+				'@currency' => 'EUR',
+				'@quantity' => '1',
+				'@type' => 'ZEVP',
+				'@value' => $price_netto/100,
+			),
+			array(
+				'@currency' => 'EUR',
+				'@quantity' => '1',
+				'@type' => 'ZVK0',
+				'@value' => $price_brutto/100,
+			),
+		);
+		
 
-		$r["prices"] = (isset($d["distributor"]["prices"]["price"]) ? $d["distributor"]["prices"]["price"] : null);
-		$r["tax"] = (isset($d["distributor"]["tax"]["@value"]) ? $d["tax"]["@value"] : null);
-		*/
-		//$r['RAW'] = $value;
+		//$r['RAW'] = $data;
 						
 		return $r;
 	}

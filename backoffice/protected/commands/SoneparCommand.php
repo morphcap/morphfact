@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 class SoneparCommand extends CConsoleCommand
 {
@@ -33,7 +33,6 @@ class SoneparCommand extends CConsoleCommand
 			case 'products':
 				$model = new SupplierImport;
 				$data = Yii::app()->sonepar->ImportProducts($model);
-				print_r($data);
 			break;
 				
 			default:

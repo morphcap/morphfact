@@ -127,6 +127,7 @@ class Cep extends CApplicationComponent
 				$md = array(
 					'id' => $main['id'],
 					'name' => $main['attribute'][0],
+					'source' => 'ep',
 				);
 				
 				$this->trace("ID: ".$md['id']." \tNAME: ".$md['name']);
@@ -162,6 +163,7 @@ class Cep extends CApplicationComponent
 				$sd = array(
 					'id' => $sub['id'],
 					'name' => $sub['attribute'][0],
+					'source' => 'ep',
 				);
 				
 				$this->trace("ID: ".$sd['id']." \t".str_repeat("\t",$level)."NAME: ".$sd['name']);
@@ -288,7 +290,7 @@ class Cep extends CApplicationComponent
 				
 		$d = $d["base"];
 		$r = array();
-		$r["source"] = $d["ep"];
+		$r["source"] = "ep";
 		//print_r($d);
 		$r["product-id"] = $d["product-id"];
 		$r["modification-date"] = $d["modification-date"];

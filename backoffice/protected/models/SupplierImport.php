@@ -16,6 +16,7 @@ class SupplierImport extends CApplicationComponent
 					's_id_parent' => 0,
 					's_id_master' => 0,
 					'name' => (string)$main['name'],
+					'source' => (string)$main['source'],
 				);
 				
 				EDMSQuery::instance($this->collection."_groups")->insert($d);
@@ -43,6 +44,7 @@ class SupplierImport extends CApplicationComponent
 					's_id_parent' => (int)$parent_id,
 					's_id_master' => (int)$master_id,
 					'name' => (string)$sub['name'],
+					'source' => (string)$sub['source'],
 				);
 				
 				EDMSQuery::instance($this->collection."_groups")->insert($d);
@@ -71,6 +73,7 @@ class SupplierImport extends CApplicationComponent
 			// Insert
 			$d = array(
 				's_id' => (int)$data['product-id'],
+				'source' => (string)$data['source'],
 				'name' => (string)$data['name'],
 				'category' => (int)$data['category'],
 				'txt_short' => (string)$data['txt_short'],

@@ -112,12 +112,20 @@ class GDI extends CApplicationComponent
 			
 				// prepare data
 				$artikelnr = 0; //$act['s_id'];
-				if (isset($act['category'])) {
-					$wgr = 10000+$act['category'];
-					$sortiment = $sortiments[$act['category']];
-				} else {
-					$wgr = '';
-					$sortiment = '';
+				
+				if ($act['source'] == "ep") {
+					if (isset($act['category'])) {
+						$wgr = 10000+$act['category'];
+						$sortiment = $sortiments[$act['category']];
+					} else {
+						$wgr = '';
+						$sortiment = '';
+					}
+				}
+				
+				if ($act['source'] == "sonepar") {
+					$wgr = 30000;
+					$sortiment = 1;
 				}
 				
 				$arttext = str_replace("'", "''", $act['name']);

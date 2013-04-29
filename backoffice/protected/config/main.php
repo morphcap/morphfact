@@ -63,7 +63,7 @@ return array(
 		),
 		*/
 		'db'=>array(
-			'connectionString' => 'firebird:dbname=10.211.55.3/23053:C:\\GDI\\GDIBline\\Mandanten\\2_test\\GDI.GDB;charset=UTF8',
+			'connectionString' => 'firebird:dbname=10.211.55.3/23053:C:\\GDI\\GDIBline\\Mandanten\\1_test\\GDI.GDB;charset=UTF8',
 			'emulatePrepare' => true,
 			'username' => 'sysdba',
 			'password' => 'masterkey',
