@@ -90,10 +90,10 @@ class GDI extends CApplicationComponent
 		}
 	}
 	
-	public function SyncProducts()
+	public function SyncProducts($source)
 	{
 		$model = new SupplierImport;
-		
+				
 		// prepare groups to get sortiment id by group-id
 		$sortiments = array();
 		$groups = $model->GetCatalog();
@@ -103,10 +103,9 @@ class GDI extends CApplicationComponent
 		
 		//$data = $model->GetProducts();
 		
-		$data = EDMSQuery::instance($model->collection."_products")->findCursor();
+		$data = EDMSQuery::instance($model->collection."_products")->findCursor( array('source'=>$source) );
 		
 		$connection=Yii::app()->db;
-		
 
 		foreach ($data as $act) {
 			
@@ -114,6 +113,8 @@ class GDI extends CApplicationComponent
 				$artikelnr = 0; //$act['s_id'];
 				
 				if ($act['source'] == "ep") {
+					$liefer1 = 70002;
+					
 					if (isset($act['category'])) {
 						$wgr = 10000+$act['category'];
 						$sortiment = $sortiments[$act['category']];
@@ -130,7 +131,6 @@ class GDI extends CApplicationComponent
 				
 				$arttext = str_replace("'", "''", $act['name']);
 				$eancode = (isset($act['eancode']) ? $act['eancode'] : '');
-				$liefer1 = 70002;
 				$liefartnr1 = (isset($act['s_id']) ? $act['s_id'] : '');
 				$langtext = (isset($act['txt_short']) ? str_replace("'", "''", $act['txt_short']) : '');
 				$herstell = (isset($act['manufacturer']) ? $act['manufacturer'] : '');

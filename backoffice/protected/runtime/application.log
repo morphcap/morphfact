@@ -1,3 +1,128 @@
 2013/04/18 22:15:10 [info] [SoneparCommand] Starting Import Type [catalog]
 2013/04/18 22:15:50 [info] [SoneparCommand] Starting Import Type [catalog]
 2013/04/18 22:15:59 [info] [SoneparCommand] Starting Import Type [catalog]
+2013/04/29 13:16:00 [info] [GDICommand] Starting Sync [groups]
+2013/04/29 13:16:01 [info] [GDICommand] Finishing Sync
+2013/04/29 13:17:15 [info] [EPCommand] Starting Import Type [catalog] cached[0]
+2013/04/29 13:17:17 [info] [EPCommand] Finishing Import
+2013/04/29 13:17:30 [info] [EPCommand] Starting Import Type [products] cached[0]
+2013/04/29 13:17:57 [info] [EPCommand] Starting Import Type [products] cached[0]
+2013/04/29 13:21:08 [info] [GDICommand] Starting Sync [groups]
+2013/04/29 13:21:17 [info] [GDICommand] Finishing Sync
+2013/04/29 13:21:31 [info] [GDICommand] Starting Sync [products]
+2013/04/29 13:22:22 [info] [GDICommand] Finishing Sync
+2013/04/29 13:26:51 [info] [SoneparCommand] Starting Import Type [groups]
+2013/04/29 13:26:51 [error] [SoneparCommand] Unknown type
+2013/04/29 13:27:10 [info] [SoneparCommand] Starting Import Type [groups]
+2013/04/29 13:27:10 [error] [SoneparCommand] Unknown type
+2013/04/29 13:27:15 [info] [SoneparCommand] Starting Import Type [wg]
+2013/04/29 13:27:15 [error] [SoneparCommand] Unknown type
+2013/04/29 13:27:33 [info] [SoneparCommand] Starting Import Type [catalog]
+2013/04/29 14:50:52 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 14:50:56 [info] [SoneparCommand] Finishing Import
+2013/04/29 14:52:01 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 14:52:02 [info] [SoneparCommand] Finishing Import
+2013/04/29 14:56:32 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 14:56:33 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:04:26 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:04:27 [error] [php] Undefined variable: text1 (/var/www/morphFact/backoffice/protected/components/Csonepar.php:121)
+Stack trace:
+#0 unknown(0): SoneparCommand->actionImport()
+#1 /var/www/morphFact/framework/console/CConsoleCommand.php(173): ReflectionMethod->invokeArgs()
+#2 /var/www/morphFact/framework/console/CConsoleCommandRunner.php(68): SoneparCommand->run()
+#3 /var/www/morphFact/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run()
+#4 /var/www/morphFact/framework/base/CApplication.php(162): CConsoleApplication->processRequest()
+#5 /var/www/morphFact/framework/yiic.php(34): CConsoleApplication->run()
+#6 /var/www/morphFact/backoffice/protected/yiic.php(8): require_once()
+#7 /var/www/morphFact/backoffice/protected/yiic(4): require_once()
+
+2013/04/29 15:04:49 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:04:50 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:05:27 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:05:27 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:05:43 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:05:43 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:19:14 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:19:14 [error] [php] Undefined index: source (/var/www/morphFact/backoffice/protected/models/SupplierImport.php:76)
+Stack trace:
+#0 unknown(0): SoneparCommand->actionImport()
+#1 /var/www/morphFact/framework/console/CConsoleCommand.php(173): ReflectionMethod->invokeArgs()
+#2 /var/www/morphFact/framework/console/CConsoleCommandRunner.php(68): SoneparCommand->run()
+#3 /var/www/morphFact/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run()
+#4 /var/www/morphFact/framework/base/CApplication.php(162): CConsoleApplication->processRequest()
+#5 /var/www/morphFact/framework/yiic.php(34): CConsoleApplication->run()
+#6 /var/www/morphFact/backoffice/protected/yiic.php(8): require_once()
+#7 /var/www/morphFact/backoffice/protected/yiic(4): require_once()
+
+2013/04/29 15:19:51 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:19:51 [error] [php] Undefined index: txt_long (/var/www/morphFact/backoffice/protected/models/SupplierImport.php:80)
+Stack trace:
+#0 unknown(0): SoneparCommand->actionImport()
+#1 /var/www/morphFact/framework/console/CConsoleCommand.php(173): ReflectionMethod->invokeArgs()
+#2 /var/www/morphFact/framework/console/CConsoleCommandRunner.php(68): SoneparCommand->run()
+#3 /var/www/morphFact/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run()
+#4 /var/www/morphFact/framework/base/CApplication.php(162): CConsoleApplication->processRequest()
+#5 /var/www/morphFact/framework/yiic.php(34): CConsoleApplication->run()
+#6 /var/www/morphFact/backoffice/protected/yiic.php(8): require_once()
+#7 /var/www/morphFact/backoffice/protected/yiic(4): require_once()
+
+2013/04/29 15:20:35 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:20:36 [error] [php] Undefined index: manufacturer (/var/www/morphFact/backoffice/protected/models/SupplierImport.php:82)
+Stack trace:
+#0 unknown(0): SoneparCommand->actionImport()
+#1 /var/www/morphFact/framework/console/CConsoleCommand.php(173): ReflectionMethod->invokeArgs()
+#2 /var/www/morphFact/framework/console/CConsoleCommandRunner.php(68): SoneparCommand->run()
+#3 /var/www/morphFact/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run()
+#4 /var/www/morphFact/framework/base/CApplication.php(162): CConsoleApplication->processRequest()
+#5 /var/www/morphFact/framework/yiic.php(34): CConsoleApplication->run()
+#6 /var/www/morphFact/backoffice/protected/yiic.php(8): require_once()
+#7 /var/www/morphFact/backoffice/protected/yiic(4): require_once()
+
+2013/04/29 15:20:49 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:20:49 [error] [php] Undefined index: manufacturer_product-id (/var/www/morphFact/backoffice/protected/models/SupplierImport.php:83)
+Stack trace:
+#0 unknown(0): SoneparCommand->actionImport()
+#1 /var/www/morphFact/framework/console/CConsoleCommand.php(173): ReflectionMethod->invokeArgs()
+#2 /var/www/morphFact/framework/console/CConsoleCommandRunner.php(68): SoneparCommand->run()
+#3 /var/www/morphFact/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run()
+#4 /var/www/morphFact/framework/base/CApplication.php(162): CConsoleApplication->processRequest()
+#5 /var/www/morphFact/framework/yiic.php(34): CConsoleApplication->run()
+#6 /var/www/morphFact/backoffice/protected/yiic.php(8): require_once()
+#7 /var/www/morphFact/backoffice/protected/yiic(4): require_once()
+
+2013/04/29 15:21:03 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:21:04 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:40:48 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:40:48 [error] [php] Undefined index: P (/var/www/morphFact/backoffice/protected/components/Csonepar.php:140)
+Stack trace:
+#0 unknown(0): SoneparCommand->actionImport()
+#1 /var/www/morphFact/framework/console/CConsoleCommand.php(173): ReflectionMethod->invokeArgs()
+#2 /var/www/morphFact/framework/console/CConsoleCommandRunner.php(68): SoneparCommand->run()
+#3 /var/www/morphFact/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run()
+#4 /var/www/morphFact/framework/base/CApplication.php(162): CConsoleApplication->processRequest()
+#5 /var/www/morphFact/framework/yiic.php(34): CConsoleApplication->run()
+#6 /var/www/morphFact/backoffice/protected/yiic.php(8): require_once()
+#7 /var/www/morphFact/backoffice/protected/yiic(4): require_once()
+
+2013/04/29 15:42:34 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:42:35 [error] [php] Undefined index: P (/var/www/morphFact/backoffice/protected/components/Csonepar.php:140)
+Stack trace:
+#0 unknown(0): SoneparCommand->actionImport()
+#1 /var/www/morphFact/framework/console/CConsoleCommand.php(173): ReflectionMethod->invokeArgs()
+#2 /var/www/morphFact/framework/console/CConsoleCommandRunner.php(68): SoneparCommand->run()
+#3 /var/www/morphFact/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run()
+#4 /var/www/morphFact/framework/base/CApplication.php(162): CConsoleApplication->processRequest()
+#5 /var/www/morphFact/framework/yiic.php(34): CConsoleApplication->run()
+#6 /var/www/morphFact/backoffice/protected/yiic.php(8): require_once()
+#7 /var/www/morphFact/backoffice/protected/yiic(4): require_once()
+
+2013/04/29 15:43:11 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:44:13 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:45:36 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:47:28 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:47:34 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:55:17 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:55:23 [info] [SoneparCommand] Finishing Import
+2013/04/29 15:56:43 [info] [SoneparCommand] Starting Import Type [products]
+2013/04/29 15:56:49 [info] [SoneparCommand] Finishing Import
+2013/04/30 11:56:48 [info] [SoneparCommand] Starting Import Type [products]

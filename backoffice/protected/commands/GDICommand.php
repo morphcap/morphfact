@@ -17,9 +17,9 @@ class GDICommand extends CConsoleCommand
 		ini_set('memory_limit', '1280M');
 	}
 
-	public function actionSync($type)
+	public function actionSync($type, $source)
 	{
-		Yii::log("Starting Sync [$type]",'info','GDICommand');
+		Yii::log("Starting Sync: type [$type] source [$source]",'info','GDICommand');
 		
 		switch ($type) {
 			case 'groups':
@@ -27,7 +27,12 @@ class GDICommand extends CConsoleCommand
 			break;
 
 			case 'products':
-				$result = Yii::app()->gdi->SyncProducts();
+				if ($source != "ep" && $source != "sonepar") {
+					Yii::log('Unknown source','error','GDICommand');
+					return 1;					
+				}
+				
+				$result = Yii::app()->gdi->SyncProducts($source);
 			break;
 				
 			default:
@@ -41,7 +46,7 @@ class GDICommand extends CConsoleCommand
 
 	public function actionTransfer($type)
 	{
-		Yii::log("Starting Transfer [$type]",'info','GDICommand');
+		Yii::log("Starting Transfer: type [$type]",'info','GDICommand');
 		
 		switch ($type) {
 			case 'wg2products':

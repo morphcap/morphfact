@@ -149,18 +149,18 @@ class Csonepar extends CApplicationComponent
 				'@currency' => 'EUR',
 				'@quantity' => '1',
 				'@type' => 'ZEVP',
-				'@value' => $price_netto/100,
+				'@value' => number_format($price_netto/100,2),
 			),
 			array(
 				'@currency' => 'EUR',
 				'@quantity' => '1',
 				'@type' => 'ZVK0',
-				'@value' => $price_brutto/100,
+				'@value' => number_format((($price_brutto/100)*1.19),2),
 			),
 		);
 		
 
-		//$r['RAW'] = $data;
+		$r['RAW'] = $data;
 						
 		return $r;
 	}
