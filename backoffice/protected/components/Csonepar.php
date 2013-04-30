@@ -119,6 +119,17 @@ class Csonepar extends CApplicationComponent
 		//print_r($data);
 		$r["source"] = "sonepar";
 		
+		// main data handling
+		if (!isset($data['A'])) {
+			//print_r($data);
+			return false;
+		}
+		if (!isset($data['B'])) {
+			//print_r($data);
+			return false;
+		}
+				
+		
 		$r["product-id"] = $artnr;
 		$r["eancode"] = $data['B'][9];
 		$r["category"] =  $data['A'][11];
