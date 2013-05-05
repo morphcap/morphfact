@@ -112,7 +112,7 @@ class Csonepar extends CApplicationComponent
 					$artnr = $d[20];
 					if (!isset($r[$artnr]))
 						$r[$artnr] = array();	
-					$r[$artnr][$d[0]] = $d[00];
+					$r[$artnr][$d[0]] = $d[22];
 				}
 
 			}
