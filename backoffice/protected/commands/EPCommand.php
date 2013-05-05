@@ -19,7 +19,8 @@ class EPCommand extends CConsoleCommand
 
 	public function actionImport($type, $cached=0)
 	{
-		Yii::log("Starting Import: type [$type] cached [$cached]",'info','EPCommand');
+		Yii::log("Starting Import:
+		 type [$type] cached [$cached]",'info','EPCommand');
 		
 		switch ($type) {
 			case 'catalog':

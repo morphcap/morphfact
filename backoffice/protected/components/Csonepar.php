@@ -91,19 +91,37 @@ class Csonepar extends CApplicationComponent
 			
 			if (isset($d[0]) && ($d[0] == "P")) {
 
-				$artnr = $d[2];
-				
-				if (!isset($r[$artnr]))
-					$r[$artnr] = array();
+				// check for first price
+				if (isset($d[2]) && ($d[2] > 0)) {
+					$artnr = $d[2];
+					if (!isset($r[$artnr]))
+						$r[$artnr] = array();	
+					$r[$artnr][$d[0]] = $d[4];
+				}
 
-				$r[$artnr][$d[0]] = $d;
+				// check for second price
+				if (isset($d[11]) && ($d[11] > 0)) {
+					$artnr = $d[11];
+					if (!isset($r[$artnr]))
+						$r[$artnr] = array();	
+					$r[$artnr][$d[0]] = $d[13];
+				}
+
+				// check for third price
+				if (isset($d[20]) && ($d[20] > 0)) {
+					$artnr = $d[20];
+					if (!isset($r[$artnr]))
+						$r[$artnr] = array();	
+					$r[$artnr][$d[0]] = $d[00];
+				}
+
 			}
 		}
 		
 		// parse raw data and prepare result
 		foreach ($r as $key=>$value) {
 			$d = $this->ImportProducts_parseProduct($key, $value);
-	
+			//print_r($d);
 			// save product
 			if ($d)
 				$model->UpdateProduct($d);			
@@ -153,7 +171,7 @@ class Csonepar extends CApplicationComponent
 			return false;
 		}
 		$price_brutto = $data['A'][9];
-		$price_netto = $data['P'][4];
+		$price_netto = $data['P'];
 		
 		$r['prices'] = array(
 			array(
