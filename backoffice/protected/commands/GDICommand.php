@@ -33,7 +33,7 @@ class GDICommand extends CConsoleCommand
 					break;
 					
 					case "sonepar":
-						$result = Yii::app()->gdi->SyncProducts();
+						$result = Yii::app()->gdi->SyncProducts($source);
 					break;
 
 					default:

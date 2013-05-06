@@ -90,135 +90,18 @@ class GDI extends CApplicationComponent
 		}
 	}
 	
-	public function SyncProductsEP($source)
+
+	public function SyncProducts($source)
 	{
 		$model = new SupplierImport;
-				
+
 		// prepare groups to get sortiment id by group-id
 		$sortiments = array();
 		$groups = $model->GetCatalog();
 		foreach ($groups as $act) {
 			$sortiments[$act["s_id"]] = $act["s_id_master"];
 		}
-		
-		//$data = $model->GetProducts();
-		
-		$data = EDMSQuery::instance($model->collection."_products")->findCursor( array('source'=>"ep") );
-		
-		$connection=Yii::app()->db;
 
-		foreach ($data as $act) {
-			
-				// prepare data
-				$artikelnr = 0; //$act['s_id'];
-				
-				$liefer1 = 70002;
-				
-				if (isset($act['category'])) {
-					$wgr = 10000+$act['category'];
-					$sortiment = $sortiments[$act['category']];
-				} else {
-					$wgr = '';
-					$sortiment = '';
-				}
-				
-				$arttext = str_replace("'", "''", $act['name']);
-				$eancode = (isset($act['eancode']) ? $act['eancode'] : '');
-				$liefartnr1 = (isset($act['s_id']) ? $act['s_id'] : '');
-				$langtext = (isset($act['txt_short']) ? str_replace("'", "''", $act['txt_short']) : '');
-				$herstell = (isset($act['manufacturer']) ? $act['manufacturer'] : '');
-				$herartnr = (isset($act['manufacturer_product-id']) ? $act['manufacturer_product-id'] : '');
-
-				$sql = "SELECT ARTIKELNR FROM ARTIKEL WHERE (LIEFARTNR1='$liefartnr1' AND LIEFER1='$liefer1') OR (LIEFARTNR2='$liefartnr1' AND LIEFER2='$liefer1')";
-				$command=$connection->createCommand($sql);
-								
-				$dbr = $command->query();
-				$rows = $dbr->readAll();
-				if (!$rows) {
-					// Create new
-					// find next articlenumber
-					$command=$connection->createCommand("Select MAX(cast(ARTIKELNR as integer)) as new From ARTIKEL");
-					$dbr = $command->query();
-					$rowsc = $dbr->read();
-					$artikelnr = $rowsc['new']+1;
-
-					// Create new article					
-					$sqli = "INSERT INTO ARTIKEL (ARTIKELNR, SORTIMENT, WGR, ARTTEXT, EANCODE, LIEFER1, LIEFARTNR1, LANGTEXT, HERSTELL, HERARTNR) VALUES ('$artikelnr', '$sortiment', '$wgr', '$arttext', '$eancode', '$liefer1', '$liefartnr1', '$langtext', '$herstell', '$herartnr')";
-					$command=$connection->createCommand($sqli);
-					try {
-						$command->execute();
-					} catch (Exception $e) {
-						$artikelnr = 0;
-						Yii::log('Exception while inserting article '.$liefartnr1.': '.$e->getMessage(),'error', 'GDICommand');
-					}
-					
-					// create extra row for linking with supplier
-					// create new
-					if ($artikelnr > 0) {
-						$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefer1', '$artikelnr', 'EUR', '$liefartnr1')";
-						$command=$connection->createCommand($sqli);
-						$command->execute();						
-					}
-															
-				} else {
-					/*
-					// create extra row for prices-linking with supplier
-					// delete old mapping
-					$sqli = "DELETE FROM ADRART WHERE KZADRTYP='L' AND ADRESSNR='$liefer1' AND ARTIKELNR='$artikelnr'";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-					// create new
-					$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefer1', '$artikelnr', 'EUR', '$liefartnr1')";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-					*/
-					$artikelnr = $rows[0]['artikelnr'];
-					if (sizeof($rows) > 0 ) {
-						Yii::log('Article already exists - more than one for '.$liefartnr1,'warn', 'GDICommand');
-						$artikelnr = 0;
-					}
-				}
-				
-				// Update Prices
-				
-				// EK = ZVK0
-				$prices = array();
-				if (isset($act['data']['prices']) && is_array($act['data']['prices'])) {
-					foreach ($act['data']['prices'] as $p) {
-						if (isset($p['@type']) && isset($p['@value']))
-							$prices[$p['@type']] = $p['@value'];
-					}
-				}
-
-				if ($artikelnr > 0 && isset($prices['ZVK0'])) {
-					$sqli = "DELETE FROM PREISE WHERE ART='I' AND ADRESSNR='$liefer1' AND ARTIKELNR='$artikelnr'";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-					// create new
-					$sqli = "INSERT INTO PREISE (ART, POSNR, ADRESSNR, ARTIKELNR, MATERIAL) VALUES ('I', 1, '$liefer1', '$artikelnr', '".$prices['ZVK0']."')";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-				}
-
-				// VK = ZEVP
-				$plist = 1;
-				if ($artikelnr > 0 && isset($prices['ZEVP'])) {
-					$sqli = "DELETE FROM PREISE WHERE ART='I' AND ADRESSNR='0' AND ARTIKELNR='$artikelnr' AND PREISLST='$plist'";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-					// create new
-					$sqli = "INSERT INTO PREISE (ART, POSNR, PREISLST, ARTIKELNR, MATERIAL) VALUES ('I', 1, '$plist', '$artikelnr', '".$prices['ZEVP']."')";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-				}
-			
-		}
-	}
-
-	public function SyncProductsSonepar($source)
-	{
-		$model = new SupplierImport;
-				
 		$data = EDMSQuery::instance($model->collection."_products")->findCursor( array('source'=>$source) );
 		
 		$connection=Yii::app()->db;
@@ -228,66 +111,98 @@ class GDI extends CApplicationComponent
 				// prepare data
 				$artikelnr = 0; //$act['s_id'];
 				
-				$liefer1 = 70003;
-				$wgr = 30000;
-				$sortiment = 1;
+				if ($source == "sonepar") {
+					$liefnr = 70003;
+					$wgr = 30000;
+					$sortiment = 1;		
+				}
+
+				if ($source == "ep") {
+					$liefnr = 70002;
 				
+					if (isset($act['category'])) {
+						$wgr = 10000+$act['category'];
+						$sortiment = $sortiments[$act['category']];
+					} else {
+						$wgr = '';
+						$sortiment = '';
+					}
+				}
+
+				// preset variables
 				$arttext = str_replace("'", "''", $act['name']);
-				$eancode = (isset($act['eancode']) ? $act['eancode'] : '');
-				$liefartnr1 = (isset($act['s_id']) ? $act['s_id'] : '');
+				$eancode = (isset($act['eancode']) ? trim($act['eancode']) : '');
+				$liefartnr = (isset($act['s_id']) ? $act['s_id'] : '');
 				$langtext = (isset($act['txt_short']) ? str_replace("'", "''", $act['txt_short']) : '');
 				$herstell = (isset($act['manufacturer']) ? $act['manufacturer'] : '');
 				$herartnr = (isset($act['manufacturer_product-id']) ? $act['manufacturer_product-id'] : '');
+				
+				// state
+				$state = false;
+				$artnr = false;
 
-				$sql = "SELECT ARTIKELNR FROM ARTIKEL WHERE (LIEFARTNR1='$liefartnr1' AND LIEFER1='$liefer1') OR (LIEFARTNR2='$liefartnr1' AND LIEFER2='$liefer1')";
-				$command=$connection->createCommand($sql);
-								
+				// check if article with supplier mapping exists
+				$sql = "SELECT ARTIKELNR FROM ADRART WHERE KZADRTYP='L' AND ADRESSNR='$liefnr' AND BESTNR='$liefartnr'";
+				$command=$connection->createCommand($sql);								
 				$dbr = $command->query();
 				$rows = $dbr->readAll();
-				if (!$rows) {
-					// Create new
+				if ($rows) {
+					// found artikel mapping
+					$state = "mapping-exists";
+					$artnr = $rows[0]['artikelnr'];
+					if (sizeof($rows) > 1) {
+						Yii::log("More than one article mapping found for BESTENR $liefartnr",'error', 'GDICommand');					
+					}
+				}
+				
+				// check for dublicate EAN, if mapping doesnt exist
+				if (!$state && $eancode != "") {
+					$sql = "SELECT ARTIKELNR FROM ARTIKEL WHERE EANCODE='$eancode'";
+					$command=$connection->createCommand($sql);								
+					$dbr = $command->query();
+					$rows = $dbr->readAll();
+					if ($rows) {
+						// found artikel mapping
+						$state = "ean-exists";
+						print_r($rows);
+						$artnr = $rows[0]['artikelnr'];
+						Yii::log("EAN Mapping exists ARTIKEL $artnr - BESTENR $liefartnr - EAN [$eancode]",'error', 'GDICommand');
+						exit;
+						if (sizeof($rows) > 1) {
+							Yii::log("More than one article with ean found for BESTENR $liefartnr - EAN $eancode",'error', 'GDICommand');					
+						}
+					}
+				}
+				
+				// get new artikelnr when nothing found
+				if (!$state) {
 					// find next articlenumber
 					$command=$connection->createCommand("Select MAX(cast(ARTIKELNR as integer)) as new From ARTIKEL");
 					$dbr = $command->query();
 					$rowsc = $dbr->read();
-					$artikelnr = $rowsc['new']+1;
-
-					// Create new article					
-					$sqli = "INSERT INTO ARTIKEL (ARTIKELNR, SORTIMENT, WGR, ARTTEXT, EANCODE, LIEFER1, LIEFARTNR1, LANGTEXT, HERSTELL, HERARTNR) VALUES ('$artikelnr', '$sortiment', '$wgr', '$arttext', '$eancode', '$liefer1', '$liefartnr1', '$langtext', '$herstell', '$herartnr')";
+					$artnr = $rowsc['new']+1;
+					$state = "new-article";
+				}
+				
+				// Create new article					
+				if ($state == "new-article") {
+					$sqli = "INSERT INTO ARTIKEL (ARTIKELNR, SORTIMENT, WGR, ARTTEXT, EANCODE, LANGTEXT, HERSTELL, HERARTNR) VALUES ('$artnr', '$sortiment', '$wgr', '$arttext', '$eancode', '$langtext', '$herstell', '$herartnr')";
 					$command=$connection->createCommand($sqli);
 					try {
 						$command->execute();
 					} catch (Exception $e) {
-						$artikelnr = 0;
-						Yii::log('Exception while inserting article '.$liefartnr1.': '.$e->getMessage(),'error', 'GDICommand');
-					}
-					
-					// create extra row for linking with supplier
-					// create new
-					if ($artikelnr > 0) {
-						$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefer1', '$artikelnr', 'EUR', '$liefartnr1')";
-						$command=$connection->createCommand($sqli);
-						$command->execute();						
-					}
-															
-				} else {
-					/*
-					// create extra row for prices-linking with supplier
-					// delete old mapping
-					$sqli = "DELETE FROM ADRART WHERE KZADRTYP='L' AND ADRESSNR='$liefer1' AND ARTIKELNR='$artikelnr'";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-					// create new
-					$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefer1', '$artikelnr', 'EUR', '$liefartnr1')";
-					$command=$connection->createCommand($sqli);
-					$command->execute();
-					*/
-					$artikelnr = $rows[0]['artikelnr'];
-					if (sizeof($rows) > 0 ) {
-						Yii::log('Article already exists - more than one for '.$liefartnr1,'warn', 'GDICommand');
-						$artikelnr = 0;
+						$state = "new-article-failed";
+						Yii::log("Exception while inserting new article BESTENR $liefartnr: ".$e->getMessage(),'error', 'GDICommand');
 					}
 				}
+				
+				// Link article with suppiert - when not already linked
+				if ($state == "new-article" || $state == "ean-exists") {
+					$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefnr', '$artnr', 'EUR', '$liefartnr')";
+					$command=$connection->createCommand($sqli);
+					$command->execute();						
+				}
+					
 				
 				// Update Prices
 				
@@ -300,28 +215,27 @@ class GDI extends CApplicationComponent
 					}
 				}
 
-				if ($artikelnr > 0 && isset($prices['ZVK0'])) {
-					$sqli = "DELETE FROM PREISE WHERE ART='I' AND ADRESSNR='$liefer1' AND ARTIKELNR='$artikelnr'";
+				if ($artnr > 0 && isset($prices['ZVK0'])) {
+					$sqli = "DELETE FROM PREISE WHERE ART='I' AND ADRESSNR='$liefnr' AND ARTIKELNR='$artnr'";
 					$command=$connection->createCommand($sqli);
 					$command->execute();
 					// create new
-					$sqli = "INSERT INTO PREISE (ART, POSNR, ADRESSNR, ARTIKELNR, MATERIAL) VALUES ('I', 1, '$liefer1', '$artikelnr', '".$prices['ZVK0']."')";
+					$sqli = "INSERT INTO PREISE (ART, POSNR, ADRESSNR, ARTIKELNR, MATERIAL) VALUES ('I', 1, '$liefnr', '$artnr', '".$prices['ZVK0']."')";
 					$command=$connection->createCommand($sqli);
 					$command->execute();
 				}
 
 				// VK = ZEVP
 				$plist = 1;
-				if ($artikelnr > 0 && isset($prices['ZEVP'])) {
-					$sqli = "DELETE FROM PREISE WHERE ART='I' AND ADRESSNR='0' AND ARTIKELNR='$artikelnr' AND PREISLST='$plist'";
+				if ($artnr > 0 && isset($prices['ZEVP'])) {
+					$sqli = "DELETE FROM PREISE WHERE ART='I' AND ADRESSNR='0' AND ARTIKELNR='$artnr' AND PREISLST='$plist'";
 					$command=$connection->createCommand($sqli);
 					$command->execute();
 					// create new
-					$sqli = "INSERT INTO PREISE (ART, POSNR, PREISLST, ARTIKELNR, MATERIAL) VALUES ('I', 1, '$plist', '$artikelnr', '".$prices['ZEVP']."')";
+					$sqli = "INSERT INTO PREISE (ART, POSNR, PREISLST, ARTIKELNR, MATERIAL) VALUES ('I', 1, '$plist', '$artnr', '".$prices['ZEVP']."')";
 					$command=$connection->createCommand($sqli);
 					$command->execute();
 				}
-			
 		}
 	}
 
