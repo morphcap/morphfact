@@ -164,10 +164,8 @@ class GDI extends CApplicationComponent
 					if ($rows) {
 						// found artikel mapping
 						$state = "ean-exists";
-						print_r($rows);
 						$artnr = $rows[0]['artikelnr'];
-						Yii::log("EAN Mapping exists ARTIKEL $artnr - BESTENR $liefartnr - EAN [$eancode]",'error', 'GDICommand');
-						exit;
+						Yii::log("EAN Mapping exists ARTIKEL $artnr - BESTENR $liefartnr - EAN [$eancode]",'info', 'GDICommand');
 						if (sizeof($rows) > 1) {
 							Yii::log("More than one article with ean found for BESTENR $liefartnr - EAN $eancode",'error', 'GDICommand');					
 						}
