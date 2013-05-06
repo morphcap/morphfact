@@ -27,12 +27,21 @@ class GDICommand extends CConsoleCommand
 			break;
 
 			case 'products':
-				if ($source != "ep" && $source != "sonepar") {
-					Yii::log('Unknown source','error','GDICommand');
-					return 1;					
+				switch ($source) {
+					case "ep":
+						$result = Yii::app()->gdi->SyncProducts($source);
+					break;
+					
+					case "sonepar":
+						$result = Yii::app()->gdi->SyncProducts();
+					break;
+
+					default:
+						Yii::log('Unknown source','error','GDICommand');
+						return 1;					
+					break;
 				}
 				
-				$result = Yii::app()->gdi->SyncProducts($source);
 			break;
 				
 			default:

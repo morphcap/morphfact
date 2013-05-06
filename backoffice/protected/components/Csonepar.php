@@ -87,7 +87,7 @@ class Csonepar extends CApplicationComponent
 		$data = file($file);
 		
 		foreach ($data as $act) {
-			$d = split(";",utf8_encode($act));
+			$d = split(";",utf8_encode(trim($act)));
 			
 			if (isset($d[0]) && ($d[0] == "P")) {
 
