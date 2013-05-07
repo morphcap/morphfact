@@ -196,6 +196,11 @@ class GDI extends CApplicationComponent
 				
 				// Link article with suppiert - when not already linked
 				if ($state == "new-article" || $state == "ean-exists") {
+					//delete old mappings first (if other BESTNR)
+					$sqli = "DELETE FROM ADRART WHERE KZADRTYP='L' AND ADRESSNR='$liefnr' AND ARTIKELNR='$artnr'";
+					$command=$connection->createCommand($sqli);
+					$command->execute();
+										
 					$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefnr', '$artnr', 'EUR', '$liefartnr')";
 					$command=$connection->createCommand($sqli);
 					$command->execute();						
