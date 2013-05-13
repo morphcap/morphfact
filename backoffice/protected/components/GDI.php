@@ -190,6 +190,7 @@ class GDI extends CApplicationComponent
 						$command->execute();
 					} catch (Exception $e) {
 						$state = "new-article-failed";
+						$artnr = false;
 						Yii::log("Exception while inserting new article BESTENR $liefartnr: ".$e->getMessage(),'error', 'GDICommand');
 					}
 				}
@@ -304,6 +305,58 @@ class GDI extends CApplicationComponent
 			}
 		}
 	}
+
+	public function LinkBruno()
+	{
+		$connection=Yii::app()->db;
+		
+		$liefnr = 70001; // Bruno
+
+		$sql = "SELECT ARTIKELNR FROM ARTIKEL";
+		$command=$connection->createCommand($sql);
+
+		$dbr = $command->query();
+		$rows = $dbr->readAll();
+		if ($rows) {
+			foreach ($rows as $act) {
+				$artnr = $act["artikelnr"];
+	
+				//check if mapping exists
+				$sqli = "SELECT BESTNR FROM ADRART WHERE KZADRTYP='L' AND ADRESSNR='$liefnr' AND ARTIKELNR='$artnr'";
+				$command=$connection->createCommand($sqli);
+				$dbr = $command->query();
+				$rows2 = $dbr->readAll();
+				
+				if (!$rows2) {
+					$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefnr', '$artnr', 'EUR', '$artnr')";
+					$command=$connection->createCommand($sqli);
+					//$command->execute();											
+				}					
+
+				// delete old price
+				$sqli = "DELETE FROM PREISE WHERE ART='I' AND ADRESSNR='$liefnr' AND ARTIKELNR='$artnr'";
+				$command=$connection->createCommand($sqli);
+				$command->execute();
+				
+				// find lowest price
+				$sqli = "SELECT min(MATERIAL) FROM PREISE WHERE ART='I' AND ARTIKELNR='$artnr'";
+				$command=$connection->createCommand($sqli);
+				$dbr = $command->query();
+				$rows2 = $dbr->readAll();
+				
+				// create new
+				if ($rows2) {
+					$price = $rows2[0]["min"];
+					if ($price > 0) {
+						$sqli = "INSERT INTO PREISE (ART, POSNR, ADRESSNR, ARTIKELNR, MATERIAL) VALUES ('I', 1, '$liefnr', '$artnr', '".$price."')";
+						$command=$connection->createCommand($sqli);
+						$command->execute();						
+					}
+				}
+			}
+		}
+	}
+
 	
 }
 

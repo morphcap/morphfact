@@ -53,15 +53,19 @@ class GDICommand extends CConsoleCommand
 		Yii::log('Finishing Sync','info', 'GDICommand');
 	}
 
-	public function actionTransfer($type)
+	public function actionTool($type)
 	{
-		Yii::log("Starting Transfer: type [$type]",'info','GDICommand');
+		Yii::log("Starting Tool: type [$type]",'info','GDICommand');
 		
 		switch ($type) {
 			case 'wg2products':
 				$result = Yii::app()->gdi->TransferWG2Products();
 			break;
 				
+			case 'linkBruno':
+				$result = Yii::app()->gdi->LinkBruno();
+			break;
+
 			default:
 				Yii::log('Unknown type','error','GDICommand');
 				return 1;
