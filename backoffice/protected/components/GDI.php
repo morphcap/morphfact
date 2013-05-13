@@ -326,11 +326,10 @@ class GDI extends CApplicationComponent
 				$command=$connection->createCommand($sqli);
 				$dbr = $command->query();
 				$rows2 = $dbr->readAll();
-				
 				if (!$rows2) {
 					$sqli = "INSERT INTO ADRART (KZADRTYP, ADRESSNR, ARTIKELNR, ISOWAEHR, BESTNR) VALUES ('L', '$liefnr', '$artnr', 'EUR', '$artnr')";
 					$command=$connection->createCommand($sqli);
-					//$command->execute();											
+					$command->execute();											
 				}					
 
 				// delete old price
